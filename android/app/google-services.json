@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "980962162553",
+    "project_id": "habitapp-93ee5",
+    "storage_bucket": "habitapp-93ee5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980962162553:android:d12d34611af55738a4a1a8",
+        "android_client_info": {
+          "package_name": "com.supmah.habitsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "980962162553-v70pealoiecrkuts6j0c90ha3cc8up5h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBs2-Ge1dSKeXvci4_urL69s3y0fWDHrj4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "980962162553-v70pealoiecrkuts6j0c90ha3cc8up5h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-package com.habitapp;
+package com.supmah.habitsapp;
 
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;

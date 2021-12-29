@@ -1,16 +1,13 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import Button from './components/Button';
-import { RootStackParamList } from '../App';
+import Button from '../components/Button';
+import { RootStackParamList } from '../../App';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 interface Props {
-  readonly navigation: NativeStackNavigationProp<
-    RootStackParamList,
-    'ActionModal'
-  >;
+  readonly navigation: NativeStackNavigationProp<RootStackParamList, 'Action'>;
 }
 
 const ActionModal: React.VFC<Props> = ({ navigation }) => {
@@ -26,12 +23,12 @@ const ActionModal: React.VFC<Props> = ({ navigation }) => {
         </View>
         <Text style={styles.body}>{'What do you wanna do?'}</Text>
         <Button
-          styleButton={{ marginBottom: 6 }}
+          styleButton={styles.donButton}
           text="Done"
           onPress={() => navigation.pop()}
         />
         <Button
-          styleButton={{ backgroundColor: 'red' }}
+          styleButton={styles.removeButton}
           text="Remove"
           onPress={() => navigation.pop()}
         />
@@ -40,6 +37,12 @@ const ActionModal: React.VFC<Props> = ({ navigation }) => {
   );
 };
 const styles = StyleSheet.create({
+  donButton: {
+    marginBottom: 6,
+  },
+  removeButton: {
+    backgroundColor: 'red',
+  },
   box: {
     backgroundColor: 'white',
     padding: 12,
@@ -65,7 +68,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    height: Dimensions.get('screen').height,
   },
 });
 
