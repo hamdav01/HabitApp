@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../App';
 import Body from '../components/Body';
+import { RootStackParamList } from '../navigation/AuthStack';
 
 export type StackParameters = { readonly habitText: string };
 

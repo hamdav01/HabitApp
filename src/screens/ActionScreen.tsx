@@ -3,11 +3,11 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Button from '../components/Button';
-import { RootStackParamList } from '../../App';
 import Body from '../components/Body';
 import Header from '../components/Header';
 import TextButton from '../components/TextButton';
 import { removeHabit } from '../storage/AsyncStorage';
+import { RootStackParamList } from '../navigation/AuthStack';
 
 export type StackParameters = { readonly habitText: string };
 

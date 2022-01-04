@@ -7,7 +7,7 @@ const TextButton: React.VFC<ButtonProps> = props => {
     <Button
       {...props}
       styleButtonText={{ color: styles.buttonText, ...props.styleButtonText }}
-      styleButton={{ ...props.styleButton, backgroundColor: 'rgba(0,0,0,0)' }}
+      styleButton={{ ...props.styleButton, backgroundColor: 'transparent' }}
     />
   );
 };

@@ -1,15 +1,12 @@
 import { useFocusEffect } from '@react-navigation/core';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { RootStackParamList } from '../../App';
 import Habit from './../components/Habit';
 import { useAppState } from './../hooks/useAppState';
 import { getHabitData, Habits } from './../storage/AsyncStorage';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-
-const usersCollection = firestore().collection('User');
+import LogoutButton from '../components/LogoutButton';
+import { RootStackParamList } from '../navigation/AuthStack';
 
 interface Habit {
   habitText: string;
@@ -42,32 +39,9 @@ const HabitScreen: React.VFC<Props> = ({ navigation }) => {
   }, []);
   useFocusEffect(useCallback(() => initHabits(true), []));
   useAppState(initHabits, false);
-  useEffect(() => {
-    auth()
-      .signInAnonymously()
-      .then(async () => {
-        firestore()
-          .collection('Users')
-          .doc('Hampus')
-          .set({
-            name: 'Ada Lovelace',
-            age: 30,
-          })
-          .then(() => {
-            console.log('User added!');
-          });
-        console.log('User signed in anonymously');
-      })
-      .catch(error => {
-        if (error.code === 'auth/operation-not-allowed') {
-          console.log('Enable anonymous in your firebase console.');
-        }
-
-        console.error(error);
-      });
-  }, []);
   return (
     <ScrollView contentContainerStyle={styles.root}>
+      <LogoutButton onPress={() => navigation.popToTop()} />
       {habits.map(({ habitText }) => (
         <Habit
           key={habitText}
@@ -88,3 +62,28 @@ const styles = StyleSheet.create({
 });
 
 export default HabitScreen;
+
+// useEffect(() => {
+//   auth()
+//     .signInAnonymously()
+//     .then(async () => {
+//       firestore()
+//         .collection('Users')
+//         .doc('Hampus')
+//         .set({
+//           name: 'Ada Lovelace',
+//           age: 30,
+//         })
+//         .then(() => {
+//           console.log('User added!');
+//         });
+//       console.log('User signed in anonymously');
+//     })
+//     .catch(error => {
+//       if (error.code === 'auth/operation-not-allowed') {
+//         console.log('Enable anonymous in your firebase console.');
+//       }
+
+//       console.error(error);
+//     });
+// }, []);

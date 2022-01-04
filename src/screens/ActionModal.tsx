@@ -3,8 +3,8 @@ import { View, StyleSheet, Text } from 'react-native';
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Button from '../components/Button';
-import { RootStackParamList } from '../../App';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { RootStackParamList } from '../navigation/AuthStack';
 
 interface Props {
   readonly navigation: NativeStackNavigationProp<RootStackParamList, 'Action'>;
