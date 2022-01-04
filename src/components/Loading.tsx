@@ -1,9 +1,13 @@
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
-const LoadingComponent: React.VFC = () => (
+interface Props {
+  readonly color?: string;
+}
+
+const LoadingComponent: React.VFC<Props> = ({ color = '#6646ee' }) => (
   <View style={styles.loadingContainer}>
-    <ActivityIndicator size="large" color="#6646ee" />
+    <ActivityIndicator size="large" color={color} />
   </View>
 );
 

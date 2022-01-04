@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import LoadingComponent from './Loading';
 
 export interface Props {
   readonly text: string;
@@ -7,6 +8,7 @@ export interface Props {
   readonly styleButton?: Record<string, unknown>;
   readonly styleButtonText?: Record<string, unknown>;
   readonly disabled?: boolean;
+  readonly loading?: boolean;
 }
 
 const Button: React.VFC<Props> = ({
@@ -15,17 +17,22 @@ const Button: React.VFC<Props> = ({
   styleButton,
   styleButtonText,
   disabled = false,
+  loading = false,
 }) => {
   const buttonColor = disabled ? styles.disabledButton : styles.enabledButton;
   return (
     <TouchableOpacity
       style={{ ...styles.button, ...buttonColor, ...styleButton }}
       onPress={() => {
-        if (!disabled) {
+        if (!disabled && !loading) {
           onPress();
         }
       }}>
-      <Text style={{ ...styles.buttonText, ...styleButtonText }}>{text}</Text>
+      {loading ? (
+        <LoadingComponent color="#E8E8E8" />
+      ) : (
+        <Text style={{ ...styles.buttonText, ...styleButtonText }}>{text}</Text>
+      )}
     </TouchableOpacity>
   );
 };

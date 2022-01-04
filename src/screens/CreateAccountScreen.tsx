@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, TextInput, ScrollView } from 'react-native';
 import Button from '../components/Button';
+import ErrorBox from '../components/ErrorBox';
 import { AuthContext } from '../context/auth/AuthProvider';
 
 const handleCreateAccountErrors = (error: { code: string }) => {
@@ -19,24 +20,37 @@ const handleCreateAccountErrors = (error: { code: string }) => {
 };
 
 const LoginScreen: React.VFC = () => {
-  const [userName, setUserName] = useState<string>();
+  const [username, setUsername] = useState<string>();
   const [password, setPassword] = useState<string>();
+  const [error, setError] = useState<string>();
+  const [loading, setLoading] = useState(false);
   const { register } = useContext(AuthContext);
 
   const createAccount = async () => {
-    if (userName && password) {
-      await register(userName, password);
+    if (username && password) {
+      try {
+        setLoading(true);
+        await register({ username, password });
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setError(error.message);
+        }
+      } finally {
+        setLoading(false);
+      }
     }
   };
-  const disabledButton = !userName || !password;
+  const disabled = !username || !password;
   return (
     <ScrollView contentContainerStyle={styles.root}>
+      {error && <ErrorBox error={error} style={styles.errorBox} />}
       <TextInput
         textContentType="username"
         style={styles.input}
-        onChangeText={setUserName}
-        value={userName}
+        onChangeText={setUsername}
+        value={username}
         placeholder="username"
+        numberOfLines={1}
       />
       <TextInput
         textContentType="password"
@@ -44,10 +58,14 @@ const LoginScreen: React.VFC = () => {
         onChangeText={setPassword}
         value={password}
         placeholder="password"
+        secureTextEntry
+        numberOfLines={1}
       />
       <Button
-        disabled={disabledButton}
-        text="Crate account"
+        loading={loading}
+        disabled={disabled}
+        styleButton={styles.createAccountButton}
+        text="Create account"
         onPress={createAccount}
       />
     </ScrollView>
@@ -55,17 +73,27 @@ const LoginScreen: React.VFC = () => {
 };
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
-    margin: 24,
+    justifyContent: 'center',
+  },
+  errorBox: {
+    width: 250,
+    color: 'black',
+    marginBottom: 6,
   },
   input: {
-    margin: 6,
+    marginVertical: 6,
     paddingLeft: 6,
     borderWidth: 1,
     width: 250,
     borderRadius: 8,
     backgroundColor: '#FFFFFF',
+  },
+  createAccountButton: {
+    width: 250,
+    height: 40,
+    marginVertical: 6,
   },
 });
 

@@ -1,6 +1,8 @@
 import React, { createContext, ReactNode, useState } from 'react';
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { login } from './utils/login';
+import { register } from './utils/register';
+import { logout } from './utils/logout';
 
 type FirebaseUser = FirebaseAuthTypes.User | null;
 
@@ -8,8 +10,8 @@ interface AuthProvider {
   user?: FirebaseUser;
   setUser: (user: FirebaseUser) => void;
   login: typeof login;
-  register: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
+  register: typeof register;
+  logout: typeof logout;
 }
 
 export const AuthContext = createContext<AuthProvider>({} as AuthProvider);
@@ -26,27 +28,8 @@ export const AuthProvider: React.VFC<Props> = ({ children }) => {
         user,
         setUser,
         login,
-        register: async (email: string, password: string) => {
-          try {
-            await auth()
-              .createUserWithEmailAndPassword(email, password)
-              .then(data => {
-                console.log('data', data);
-              })
-              .catch(error => {
-                console.log('errorski,', error);
-              });
-          } catch (e) {
-            console.log(e);
-          }
-        },
-        logout: async () => {
-          try {
-            await auth().signOut();
-          } catch (e) {
-            console.error(e);
-          }
-        },
+        register,
+        logout,
       }}>
       {children}
     </AuthContext.Provider>

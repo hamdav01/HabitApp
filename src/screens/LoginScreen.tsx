@@ -31,15 +31,19 @@ const LoginScreen: React.VFC<Props> = ({ navigation }) => {
   const [password, setPassword] = useState<string>();
   const [error, setError] = useState<string>();
   const { login } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   const signIn = async () => {
     if (username && password) {
       try {
+        setLoading(true);
         await login({ username, password });
       } catch (error: unknown) {
         if (error instanceof Error) {
           setError(error.message);
         }
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -62,9 +66,10 @@ const LoginScreen: React.VFC<Props> = ({ navigation }) => {
         value={password}
         placeholder="password"
         numberOfLines={1}
-        secureTextEntry={true}
+        secureTextEntry
       />
       <Button
+        loading={loading}
         styleButton={styles.loginButton}
         disabled={disabledButton}
         text="Sign in"
@@ -90,7 +95,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   input: {
-    margin: 6,
+    marginVertical: 6,
     paddingLeft: 6,
     borderWidth: 1,
     width: 250,
@@ -99,6 +104,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     width: 250,
+    height: 40,
     marginVertical: 6,
   },
   noAccountButton: {
