@@ -6,6 +6,7 @@ import TextButton from '../components/TextButton';
 import { RootStackParamList } from '../navigation/HomeStack';
 import { AuthContext } from '../context/auth/AuthProvider';
 import ErrorBox from '../components/ErrorBox';
+import { validateEmail, validatePassword } from '../utils/Validation';
 
 const handleLoginErrors = (error: { code: string }) => {
   switch (error.code) {
@@ -27,17 +28,17 @@ interface Props {
 }
 
 const LoginScreen: React.VFC<Props> = ({ navigation }) => {
-  const [username, setUsername] = useState<string>();
+  const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
   const [error, setError] = useState<string>();
   const { login } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
 
   const signIn = async () => {
-    if (username && password) {
+    if (email && password) {
       try {
         setLoading(true);
-        await login({ username, password });
+        await login({ email, password });
       } catch (error: unknown) {
         if (error instanceof Error) {
           setError(error.message);
@@ -47,15 +48,15 @@ const LoginScreen: React.VFC<Props> = ({ navigation }) => {
       }
     }
   };
-  const disabledButton = !username || !password;
+  const disabledButton = !validatePassword(password) || !validateEmail(email);
   return (
     <ScrollView contentContainerStyle={styles.root}>
       {error && <ErrorBox error={error} style={styles.errorBox} />}
       <TextInput
         textContentType="username"
         style={styles.input}
-        onChangeText={setUsername}
-        value={username}
+        onChangeText={setEmail}
+        value={email}
         placeholder="username"
         numberOfLines={1}
       />

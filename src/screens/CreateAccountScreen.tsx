@@ -1,8 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { StyleSheet, TextInput, ScrollView } from 'react-native';
 import Button from '../components/Button';
 import ErrorBox from '../components/ErrorBox';
 import { AuthContext } from '../context/auth/AuthProvider';
+import { validateEmail, validatePassword } from '../utils/Validation';
 
 const handleCreateAccountErrors = (error: { code: string }) => {
   switch (error.code) {
@@ -20,17 +21,17 @@ const handleCreateAccountErrors = (error: { code: string }) => {
 };
 
 const LoginScreen: React.VFC = () => {
-  const [username, setUsername] = useState<string>();
+  const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);
   const { register } = useContext(AuthContext);
 
   const createAccount = async () => {
-    if (username && password) {
+    if (email && password) {
       try {
         setLoading(true);
-        await register({ username, password });
+        await register({ email, password });
       } catch (error: unknown) {
         if (error instanceof Error) {
           setError(error.message);
@@ -40,17 +41,20 @@ const LoginScreen: React.VFC = () => {
       }
     }
   };
-  const disabled = !username || !password;
+  const validEmail = useMemo(() => validateEmail(email), [email]);
+  const validPassword = useMemo(() => validatePassword(password), [password]);
+
+  const disabled = !validEmail || !validPassword;
   return (
     <ScrollView contentContainerStyle={styles.root}>
       {error && <ErrorBox error={error} style={styles.errorBox} />}
       <TextInput
+        keyboardType="email-address"
         textContentType="username"
         style={styles.input}
-        onChangeText={setUsername}
-        value={username}
+        onChangeText={setEmail}
+        value={email}
         placeholder="username"
-        numberOfLines={1}
       />
       <TextInput
         textContentType="password"
@@ -59,7 +63,6 @@ const LoginScreen: React.VFC = () => {
         value={password}
         placeholder="password"
         secureTextEntry
-        numberOfLines={1}
       />
       <Button
         loading={loading}

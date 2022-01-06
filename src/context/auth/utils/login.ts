@@ -19,12 +19,12 @@ const handleLoginErrors = (error: HandleLoginErrors) => {
 };
 
 interface Login {
-  readonly username: string;
+  readonly email: string;
   readonly password: string;
 }
-export const login = async ({ username, password }: Login) => {
+export const login = async ({ email, password }: Login) => {
   return await auth()
-    .signInWithEmailAndPassword(username, password)
+    .signInWithEmailAndPassword(email, password)
     .catch(error => {
       throw new Error(handleLoginErrors(error));
     });

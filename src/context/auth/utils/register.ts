@@ -19,12 +19,12 @@ const handleAccountCreationErrors = (error: HandleAccountCreationErrors) => {
 };
 
 interface CreateAccount {
-  readonly username: string;
+  readonly email: string;
   readonly password: string;
 }
-export const register = async ({ username, password }: CreateAccount) => {
+export const register = async ({ email, password }: CreateAccount) => {
   return await auth()
-    .createUserWithEmailAndPassword(username, password)
+    .createUserWithEmailAndPassword(email, password)
     .catch(error => {
       throw new Error(handleAccountCreationErrors(error));
     });
