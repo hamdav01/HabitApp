@@ -6,7 +6,6 @@ import Button from '../components/Button';
 import Body from '../components/Body';
 import Header from '../components/Header';
 import TextButton from '../components/TextButton';
-import { removeHabit } from '../storage/AsyncStorage';
 import { RootStackParamList } from '../navigation/AuthStack';
 
 export type StackParameters = { readonly habitText: string };
@@ -26,7 +25,7 @@ const ActionScreen: React.VFC<Props> = ({ navigation, route }) => {
         <Button
           text="Complete"
           onPress={async () => {
-            await removeHabit({ habitText });
+            // await removeHabit({ habitText });
             navigation.replace('CompleteHabit', { habitText });
           }}
         />
@@ -35,7 +34,7 @@ const ActionScreen: React.VFC<Props> = ({ navigation, route }) => {
           styleButtonText={styles.removeButtonText}
           styleButton={styles.removeButton}
           onPress={async () => {
-            await removeHabit({ habitText });
+            //  await removeHabit({ habitText });
             navigation.pop();
           }}
         />

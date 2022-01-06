@@ -5,13 +5,15 @@ import LoadingComponent from '../components/Loading';
 import { AuthContext } from '../context/auth/AuthProvider';
 import AuthStack from './AuthStack';
 import HomeStack from './HomeStack';
+import firestore from '@react-native-firebase/firestore';
 
 export const Routes = () => {
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser, setUserActions } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
   const onAuthStateChanged: FirebaseAuthTypes.AuthListenerCallback = user => {
     setUser(user);
+    setUserActions(firestore().collection('Users').doc(user?.uid));
     setLoading(false);
   };
   useEffect(() => {

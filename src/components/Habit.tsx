@@ -26,7 +26,7 @@ const Habit: React.VFC<Props> = ({ habitText, onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    width: '100%',
+    width: '90%',
     borderRadius: 12,
     borderWidth: 2,
     marginBottom: 12,

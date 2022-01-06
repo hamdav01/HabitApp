@@ -1,12 +1,14 @@
 import { useFocusEffect } from '@react-navigation/core';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
+
 import Habit from './../components/Habit';
 import { useAppState } from './../hooks/useAppState';
-import { getHabitData, Habits } from './../storage/AsyncStorage';
-import LogoutButton from '../components/LogoutButton';
 import { RootStackParamList } from '../navigation/AuthStack';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { AuthContext } from '../context/auth/AuthProvider';
+import firestore from '@react-native-firebase/firestore';
 
 interface Habit {
   habitText: string;
@@ -16,74 +18,57 @@ interface Props {
   readonly navigation: NativeStackNavigationProp<RootStackParamList, 'Habits'>;
 }
 
-const isEqual = (arr1: Habits, arr2: Habits) => {
-  const isEqual = arr1.every(
-    ({ habitText }, index: number) => habitText === arr2[index].habitText,
-  );
-  return isEqual;
-};
-
 const HabitScreen: React.VFC<Props> = ({ navigation }) => {
-  const [habits, setHabits] = useState<Habits>([]);
+  const [habits, setHabits] = useState<
+    {
+      habitText: string;
+      timeOfDay: string | string[];
+    }[]
+  >([]);
+  const { userActions } = useContext(AuthContext);
 
   const initHabits = useCallback((active: boolean) => {
     if (active) {
-      getHabitData().then(data => {
-        const habitsAreEqual =
-          habits.length > 0 && isEqual(data.habits, habits);
-        if (!habitsAreEqual) {
-          setHabits(data.habits);
-        }
+      userActions?.get().then(content => {
+        setHabits(content?.data?.()?.habits);
       });
     }
   }, []);
   useFocusEffect(useCallback(() => initHabits(true), []));
   useAppState(initHabits, false);
   return (
-    <ScrollView contentContainerStyle={styles.root}>
-      <LogoutButton onPress={() => navigation.popToTop()} />
-      {habits.map(({ habitText }) => (
-        <Habit
-          key={habitText}
-          habitText={habitText}
-          onPress={() => navigation.navigate('Action', { habitText })}
-        />
-      ))}
-    </ScrollView>
+    <SafeAreaView
+      mode={'padding'}
+      edges={['left', 'right']}
+      style={styles.root}>
+      <ScrollView
+        style={styles.scrollContainer}
+        contentContainerStyle={styles.scrollContentContainer}>
+        {habits.map(({ habitText }, index) => (
+          <Habit
+            key={index}
+            habitText={habitText}
+            onPress={() => {
+              console.log('press');
+              navigation.navigate('Action', { habitText });
+            }}
+          />
+        ))}
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
+    flexGrow: 1,
+  },
+  scrollContainer: {
+    marginVertical: 24,
+  },
+  scrollContentContainer: {
     alignItems: 'center',
-    margin: 24,
   },
 });
 
 export default HabitScreen;
-
-// useEffect(() => {
-//   auth()
-//     .signInAnonymously()
-//     .then(async () => {
-//       firestore()
-//         .collection('Users')
-//         .doc('Hampus')
-//         .set({
-//           name: 'Ada Lovelace',
-//           age: 30,
-//         })
-//         .then(() => {
-//           console.log('User added!');
-//         });
-//       console.log('User signed in anonymously');
-//     })
-//     .catch(error => {
-//       if (error.code === 'auth/operation-not-allowed') {
-//         console.log('Enable anonymous in your firebase console.');
-//       }
-
-//       console.error(error);
-//     });
-// }, []);

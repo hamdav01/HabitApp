@@ -11,7 +11,6 @@ export const useAppState = (
       const foreGround =
         appState.current.match(/inactive|background/) &&
         nextAppState === 'active';
-      console.log('useAppState effect');
       callback?.(Boolean(foreGround));
       appState.current = nextAppState;
     });
