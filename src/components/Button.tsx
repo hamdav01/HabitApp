@@ -39,14 +39,14 @@ const Button: React.VFC<Props> = ({
 
 const styles = StyleSheet.create({
   button: {
-    alignItems: 'center',
     borderRadius: 12,
+    justifyContent: 'center',
   },
   buttonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    padding: 10,
     color: '#FFFFFF',
+    textAlign: 'center',
   },
   disabledButton: {
     backgroundColor: '#DDDDDD',

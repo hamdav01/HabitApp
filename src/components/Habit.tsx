@@ -12,13 +12,15 @@ function getRandomColor() {
 
 interface Props {
   readonly habitText: string;
+  readonly color?: string;
   readonly onPress: () => void;
 }
-const Habit: React.VFC<Props> = ({ habitText, onPress }) => {
+const Habit: React.VFC<Props> = ({ habitText, onPress, color }) => {
+  const backgroundColor = color ? color : getRandomColor();
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={{ ...styles.button, backgroundColor: getRandomColor() }}>
+      style={{ ...styles.button, backgroundColor }}>
       <Text style={styles.text}>{habitText}</Text>
     </TouchableOpacity>
   );
@@ -26,10 +28,10 @@ const Habit: React.VFC<Props> = ({ habitText, onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    width: '90%',
     borderRadius: 12,
     borderWidth: 2,
     marginBottom: 12,
+    width: 300,
   },
   text: {
     textAlign: 'center',

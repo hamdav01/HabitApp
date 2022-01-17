@@ -1,28 +1,37 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HabitScreen from '../screens/HabitScreen';
 import ActionScreen, {
   StackParameters as ActionStackParameters,
 } from '../screens/ActionScreen';
 import CompleteHabitScreen, {
   StackParameters as CompleteHabitStackParameters,
 } from '../screens/CompleteHabitScreen';
-import LogoutButton from '../components/LogoutButton';
+import AuthTab from './AuthTab';
+import SelectColorScreen, {
+  SelectColorStackParameters,
+} from '../screens/SelectColorScreen';
+import HabitCreatedScreen from '../screens/HabitCreatedScreen';
 
 export type RootStackParamList = {
-  Habits: undefined;
+  Home: undefined;
   Action: ActionStackParameters;
   CompleteHabit: CompleteHabitStackParameters;
+  SelectColor: SelectColorStackParameters;
+  HabitCreated: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AuthStack = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="Habits"
-      screenOptions={{ headerRight: () => <LogoutButton /> }}>
-      <Stack.Screen name="Habits" component={HabitScreen} />
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen
+        name="Home"
+        component={AuthTab}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="Action" component={ActionScreen} />
       <Stack.Screen
         options={{
@@ -31,6 +40,8 @@ const AuthStack = () => {
         name="CompleteHabit"
         component={CompleteHabitScreen}
       />
+      <Stack.Screen name="SelectColor" component={SelectColorScreen} />
+      <Stack.Screen name="HabitCreated" component={HabitCreatedScreen} />
     </Stack.Navigator>
   );
 };

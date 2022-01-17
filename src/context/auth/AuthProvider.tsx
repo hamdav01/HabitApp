@@ -15,8 +15,6 @@ interface AuthProvider {
   login: typeof login;
   register: typeof register;
   logout: typeof logout;
-  userActions: UserActions | undefined;
-  setUserActions: React.Dispatch<React.SetStateAction<UserActions | undefined>>;
 }
 
 export const AuthContext = createContext<AuthProvider>({} as AuthProvider);
@@ -27,14 +25,11 @@ interface Props {
 
 export const AuthProvider: React.VFC<Props> = ({ children }) => {
   const [user, setUser] = useState<FirebaseUser>();
-  const [userActions, setUserActions] = useState<UserActions>();
   return (
     <AuthContext.Provider
       value={{
         user,
         setUser,
-        userActions,
-        setUserActions,
         login,
         register,
         logout,

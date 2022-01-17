@@ -1,34 +1,24 @@
-import { useFocusEffect } from '@react-navigation/core';
-import React, { useCallback, useContext, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { FlatList, ScrollView, StyleSheet } from 'react-native';
 
-import Habit from './../components/Habit';
-import { useAppState } from './../hooks/useAppState';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AuthContext } from '../context/auth/AuthProvider';
 import { getHabits, HabitType } from '../api/Habits';
+import Habit from '../components/Habit';
+import { AuthContext } from '../context/auth/AuthProvider';
 import { AuthTabNavigationProp } from '../navigation/AuthTab';
 
-type Props = AuthTabNavigationProp<'Habits'>;
-const HabitScreen: React.VFC<Props> = ({ navigation }) => {
+type Props = AuthTabNavigationProp<'HabitLibrary'>;
+const HabitLibraryScreen: React.VFC<Props> = () => {
   const [habits, setHabits] = useState<HabitType[]>([]);
   const { user } = useContext(AuthContext);
 
-  const initHabits = useCallback((active: boolean) => {
-    if (active && user) {
+  useEffect(() => {
+    if (user) {
       getHabits(user.uid).then(setHabits);
     }
   }, []);
-  useFocusEffect(useCallback(() => initHabits(true), []));
-  useAppState(initHabits, false);
   const renderItem = ({ item }: { item: HabitType }) => (
-    <Habit
-      color={item.color}
-      habitText={item.habitText}
-      onPress={() =>
-        navigation.navigate('Action', { habitText: item.habitText })
-      }
-    />
+    <Habit habitText={item.habitText} onPress={() => {}} />
   );
 
   return (
@@ -53,4 +43,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HabitScreen;
+export default HabitLibraryScreen;
