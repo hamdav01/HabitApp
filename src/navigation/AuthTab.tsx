@@ -7,7 +7,6 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from './AuthStack';
 import HabitScreen from '../screens/HabitScreen';
 import SetttingsScreen from '../screens/SettingsScreen';
-import HabitLibraryScreen from '../screens/HabitLibraryScreen';
 import LogoutButton from '../components/LogoutButton';
 import CreateHabitScreen from '../screens/CreateHabit';
 
@@ -19,7 +18,6 @@ export type AuthTabNavigationProp<T extends keyof RootTabParamList> =
 
 export type RootTabParamList = {
   Habits: undefined;
-  HabitLibrary: undefined;
   Settings: undefined;
   CreateHabit: undefined;
 };
@@ -30,7 +28,6 @@ const AuthTab = () => {
   return (
     <Tab.Navigator screenOptions={{ headerRight: () => <LogoutButton /> }}>
       <Tab.Screen name="Habits" component={HabitScreen} />
-      {/* <Tab.Screen name="HabitLibrary" component={HabitLibraryScreen} /> */}
       <Tab.Screen name="CreateHabit" component={CreateHabitScreen} />
       <Tab.Screen name="Settings" component={SetttingsScreen} />
     </Tab.Navigator>

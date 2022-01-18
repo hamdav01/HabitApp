@@ -1,12 +1,10 @@
-import { useFocusEffect } from '@react-navigation/core';
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 
 import Habit from './../components/Habit';
-import { useAppState } from './../hooks/useAppState';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthContext } from '../context/auth/AuthProvider';
-import { getHabits, HabitType } from '../api/Habits';
+import { HabitType, subscribeToHabitChange } from '../api/Habits';
 import { AuthTabNavigationProp } from '../navigation/AuthTab';
 
 type Props = AuthTabNavigationProp<'Habits'>;
@@ -14,13 +12,10 @@ const HabitScreen: React.VFC<Props> = ({ navigation }) => {
   const [habits, setHabits] = useState<HabitType[]>([]);
   const { user } = useContext(AuthContext);
 
-  const initHabits = useCallback((active: boolean) => {
-    if (active && user) {
-      getHabits(user.uid).then(setHabits);
-    }
-  }, []);
-  useFocusEffect(useCallback(() => initHabits(true), []));
-  useAppState(initHabits, false);
+  useEffect(() => {
+    const subscriber = subscribeToHabitChange(user.uid, setHabits);
+    return () => subscriber();
+  }, [user.uid]);
   const renderItem = ({ item }: { item: HabitType }) => (
     <Habit
       color={item.color}

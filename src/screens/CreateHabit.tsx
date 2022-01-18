@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 12,
+    marginHorizontal: 24,
   },
   button: {
     width: 200,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -7,6 +7,9 @@ import Body from '../components/Body';
 import Header from '../components/Header';
 import TextButton from '../components/TextButton';
 import { RootStackParamList } from '../navigation/AuthStack';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { setHabitDone } from '../api/Habits';
+import { AuthContext } from '../context/auth/AuthProvider';
 
 export type StackParameters = { readonly habitText: string };
 
@@ -14,46 +17,37 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Action'>;
 
 const ActionScreen: React.VFC<Props> = ({ navigation, route }) => {
   const { habitText } = route.params;
+  const { user } = useContext(AuthContext);
   const header = 'Habit complete screen';
   const body = `Did you finish the ${habitText} habit?`;
 
   return (
-    <ScrollView contentContainerStyle={styles.root}>
+    <SafeAreaView
+      edges={['left', 'right', 'top', 'bottom']}
+      style={styles.root}>
       <Header align="center" text={header} />
       <Body align="center" text={body} />
-      <View style={styles.buttonGroup}>
+      <View>
         <Button
           text="Complete"
           onPress={async () => {
-            // await removeHabit({ habitText });
+            await setHabitDone(user.uid, habitText);
             navigation.replace('CompleteHabit', { habitText });
           }}
         />
-        <TextButton
-          text="Remove"
-          styleButtonText={styles.removeButtonText}
-          styleButton={styles.removeButton}
-          onPress={async () => {
-            //  await removeHabit({ habitText });
-            navigation.pop();
-          }}
-        />
       </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
   root: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    flex: 1,
-    margin: 12,
-  },
-  buttonGroup: {
-    width: 200,
+    flexGrow: 1,
+    marginVertical: 12,
   },
   removeButton: {
-    marginTop: 4,
+    marginTop: 12,
   },
   removeButtonText: {
     color: 'red',

@@ -27,18 +27,14 @@ const SelectColorScreen: React.VFC<Props> = ({ navigation, route }) => {
     setLoading(true);
     if (user?.uid) {
       try {
-        const habits = await getHabits(user.uid);
         const timeOfDay = selectedTimes.flatMap(({ label, selected }) =>
           selected ? [label] : [],
         );
-        await addHabit(user.uid, [
-          ...habits,
-          {
-            habitText,
-            color,
-            timeOfDay,
-          },
-        ]);
+        await addHabit(user.uid, {
+          habitText,
+          color,
+          timeOfDay,
+        });
         navigation.navigate('HabitCreated');
       } catch (err) {
         console.log(err);

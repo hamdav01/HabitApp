@@ -3,14 +3,11 @@ import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { login } from './utils/login';
 import { register } from './utils/register';
 import { logout } from './utils/logout';
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 
-type FirebaseUser = FirebaseAuthTypes.User | null;
+type FirebaseUser = FirebaseAuthTypes.User;
 
-type UserActions =
-  FirebaseFirestoreTypes.DocumentReference<FirebaseFirestoreTypes.DocumentData>;
 interface AuthProvider {
-  user?: FirebaseUser;
+  user: FirebaseUser;
   setUser: (user: FirebaseUser) => void;
   login: typeof login;
   register: typeof register;
@@ -24,7 +21,7 @@ interface Props {
 }
 
 export const AuthProvider: React.VFC<Props> = ({ children }) => {
-  const [user, setUser] = useState<FirebaseUser>();
+  const [user, setUser] = useState<FirebaseUser>({} as FirebaseUser);
   return (
     <AuthContext.Provider
       value={{

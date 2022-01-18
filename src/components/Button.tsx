@@ -39,6 +39,8 @@ const Button: React.VFC<Props> = ({
 
 const styles = StyleSheet.create({
   button: {
+    width: 200,
+    height: 50,
     borderRadius: 12,
     justifyContent: 'center',
   },

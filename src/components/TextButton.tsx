@@ -6,14 +6,22 @@ const TextButton: React.VFC<ButtonProps> = props => {
   return (
     <Button
       {...props}
-      styleButtonText={{ color: styles.buttonText, ...props.styleButtonText }}
-      styleButton={{ ...props.styleButton, backgroundColor: 'transparent' }}
+      styleButtonText={{ ...styles.buttonText, ...props.styleButtonText }}
+      styleButton={{
+        ...styles.button,
+        ...props.styleButton,
+      }}
     />
   );
 };
 const styles = StyleSheet.create({
   buttonText: {
     color: '#000000',
+  },
+  button: {
+    backgroundColor: 'transparent',
+    width: 'auto',
+    height: 'auto',
   },
 });
 
