@@ -10,6 +10,8 @@ import SetttingsScreen from '../screens/SettingsScreen';
 import LogoutButton from '../components/LogoutButton';
 import CreateHabitScreen from '../screens/CreateHabit';
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 export type AuthTabNavigationProp<T extends keyof RootTabParamList> =
   CompositeScreenProps<
     BottomTabScreenProps<RootTabParamList, T>,
@@ -27,9 +29,37 @@ const Tab = createBottomTabNavigator<RootTabParamList>();
 const AuthTab = () => {
   return (
     <Tab.Navigator screenOptions={{ headerRight: () => <LogoutButton /> }}>
-      <Tab.Screen name="Habits" component={HabitScreen} />
-      <Tab.Screen name="CreateHabit" component={CreateHabitScreen} />
-      <Tab.Screen name="Settings" component={SetttingsScreen} />
+      <Tab.Screen
+        name="Habits"
+        component={HabitScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="home" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="CreateHabit"
+        component={CreateHabitScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="folder-multiple-plus"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SetttingsScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="account" color={color} size={size} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };

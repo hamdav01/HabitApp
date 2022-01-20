@@ -53,11 +53,11 @@ const LoginScreen: React.VFC<Props> = ({ navigation }) => {
     <ScrollView contentContainerStyle={styles.root}>
       {error && <ErrorBox error={error} style={styles.errorBox} />}
       <TextInput
-        textContentType="username"
+        textContentType="emailAddress"
         style={styles.input}
         onChangeText={setEmail}
         value={email}
-        placeholder="username"
+        placeholder="email"
         numberOfLines={1}
       />
       <TextInput

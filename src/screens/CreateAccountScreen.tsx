@@ -50,11 +50,11 @@ const LoginScreen: React.VFC = () => {
       {error && <ErrorBox error={error} style={styles.errorBox} />}
       <TextInput
         keyboardType="email-address"
-        textContentType="username"
+        textContentType="emailAddress"
         style={styles.input}
         onChangeText={setEmail}
         value={email}
-        placeholder="username"
+        placeholder="email"
       />
       <TextInput
         textContentType="password"
