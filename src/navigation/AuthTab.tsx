@@ -8,9 +8,9 @@ import { RootStackParamList } from './AuthStack';
 import HabitScreen from '../screens/HabitScreen';
 import SetttingsScreen from '../screens/SettingsScreen';
 import LogoutButton from '../components/LogoutButton';
-import CreateHabitScreen from '../screens/CreateHabit';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import HabitOptionsScreen from '../screens/HabitOptions';
 
 export type AuthTabNavigationProp<T extends keyof RootTabParamList> =
   CompositeScreenProps<
@@ -21,7 +21,7 @@ export type AuthTabNavigationProp<T extends keyof RootTabParamList> =
 export type RootTabParamList = {
   Habits: undefined;
   Settings: undefined;
-  CreateHabit: undefined;
+  HabitOptions: undefined;
 };
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
@@ -39,8 +39,8 @@ const AuthTab = () => {
         }}
       />
       <Tab.Screen
-        name="CreateHabit"
-        component={CreateHabitScreen}
+        name="HabitOptions"
+        component={HabitOptionsScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons

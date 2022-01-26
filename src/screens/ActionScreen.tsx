@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Button from '../components/Button';
@@ -8,7 +8,7 @@ import Header from '../components/Header';
 import TextButton from '../components/TextButton';
 import { RootStackParamList } from '../navigation/AuthStack';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { setHabitDone } from '../api/Habits';
+import { deleteHabit, setHabitDone } from '../api/Habits';
 import { AuthContext } from '../context/auth/AuthProvider';
 
 export type StackParameters = { readonly habitText: string };
@@ -35,6 +35,14 @@ const ActionScreen: React.VFC<Props> = ({ navigation, route }) => {
             navigation.replace('CompleteHabit', { habitText });
           }}
         />
+        <TextButton
+          styleButtonText={styles.deleteHabitButton}
+          text="Delete"
+          onPress={async () => {
+            await deleteHabit(user.uid, habitText);
+            navigation.pop();
+          }}
+        />
       </View>
     </SafeAreaView>
   );
@@ -52,6 +60,10 @@ const styles = StyleSheet.create({
   removeButtonText: {
     color: 'red',
     fontWeight: 'bold',
+  },
+  deleteHabitButton: {
+    marginTop: 8,
+    color: '#ff0033',
   },
 });
 

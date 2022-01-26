@@ -1,46 +1,52 @@
-// import React, { useContext, useEffect, useState } from 'react';
-// import { FlatList, ScrollView, StyleSheet } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useContext, useEffect, useState } from 'react';
+import { FlatList, StyleSheet } from 'react-native';
 
-// import { SafeAreaView } from 'react-native-safe-area-context';
-// import { getHabits, HabitType } from '../api/Habits';
-// import Habit from '../components/Habit';
-// import { AuthContext } from '../context/auth/AuthProvider';
-// import { AuthTabNavigationProp } from '../navigation/AuthTab';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { getHabits, HabitType } from '../api/Habits';
+import Habit from '../components/Habit';
+import { AuthContext } from '../context/auth/AuthProvider';
+import { RootStackParamList } from '../navigation/AuthStack';
 
-// type Props = AuthTabNavigationProp<'HabitLibrary'>;
-// const HabitLibraryScreen: React.VFC<Props> = () => {
-//   const [habits, setHabits] = useState<HabitType[]>([]);
-//   const { user } = useContext(AuthContext);
+type Props = NativeStackScreenProps<RootStackParamList, 'HabitLibrary'>;
 
-//   useEffect(() => {
-//     if (user) {
-//       getHabits(user.uid).then(setHabits);
-//     }
-//   }, []);
-//   const renderItem = ({ item }: { item: HabitType }) => (
-//     <Habit habitText={item.habitText} onPress={() => {}} />
-//   );
+const HabitLibraryScreen: React.VFC<Props> = ({ navigation }) => {
+  const [habits, setHabits] = useState<HabitType[]>([]);
+  const { user } = useContext(AuthContext);
 
-//   return (
-//     <SafeAreaView edges={['left', 'right']} style={styles.root}>
-//       <FlatList
-//         contentContainerStyle={styles.contentContainer}
-//         data={habits}
-//         renderItem={renderItem}
-//         keyExtractor={(_, index) => index.toString()}
-//       />
-//     </SafeAreaView>
-//   );
-// };
+  useEffect(() => {
+    if (user) {
+      getHabits(user.uid).then(setHabits);
+    }
+  }, []);
+  const renderItem = ({ item }: { item: HabitType }) => (
+    <Habit
+      habitText={item.habitText}
+      onPress={() => {
+        navigation.navigate('EditHabit', item);
+      }}
+    />
+  );
 
-// const styles = StyleSheet.create({
-//   root: {
-//     flexGrow: 1,
-//   },
-//   contentContainer: {
-//     paddingVertical: 24,
-//     alignItems: 'center',
-//   },
-// });
+  return (
+    <SafeAreaView edges={['left', 'right']} style={styles.root}>
+      <FlatList
+        contentContainerStyle={styles.contentContainer}
+        data={habits}
+        renderItem={renderItem}
+        keyExtractor={(_, index) => index.toString()}
+      />
+    </SafeAreaView>
+  );
+};
 
-// export default HabitLibraryScreen;
+const styles = StyleSheet.create({
+  root: {
+    flexGrow: 1,
+  },
+  contentContainer: {
+    paddingVertical: 24,
+    alignItems: 'center',
+  },
+});
+export default HabitLibraryScreen;

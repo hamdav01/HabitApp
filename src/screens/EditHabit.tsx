@@ -1,42 +1,45 @@
 import { StackScreenProps } from '@react-navigation/stack';
+import { type } from 'ramda';
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { addHabit, TimeOfDay } from '../api/Habits';
+import { addHabit, HabitType, TimeOfDay, updateHabit } from '../api/Habits';
 import Button from '../components/Button';
 import CheckboxText from '../components/CheckboxText';
 import { AuthContext } from '../context/auth/AuthProvider';
 import { RootStackParamList } from '../navigation/AuthStack';
 
-type Props = StackScreenProps<RootStackParamList, 'CreateHabit'>;
+export type StackParameters = HabitType;
 
-const CreateHabitScreen: React.VFC<Props> = ({ navigation }) => {
+type Props = StackScreenProps<RootStackParamList, 'EditHabit'>;
+
+const EditHabitScreen: React.VFC<Props> = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const { user } = useContext(AuthContext);
-  const [habitText, setHabitText] = useState('');
+  const [habitText, setHabitText] = useState(route.params.habitText);
   const [selectedTimes, setSelectTimes] = useState<
     { label: TimeOfDay; selected: boolean }[]
   >([
     {
       label: 'morning',
-      selected: false,
+      selected: route.params.timeOfDay === 'morning',
     },
     {
       label: 'lunch',
-      selected: false,
+      selected: route.params.timeOfDay === 'lunch',
     },
     {
       label: 'afternoon',
-      selected: false,
+      selected: route.params.timeOfDay === 'afternoon',
     },
     {
       label: 'evening',
-      selected: false,
+      selected: route.params.timeOfDay === 'evening',
     },
     {
       label: 'anytime',
-      selected: true,
+      selected: route.params.timeOfDay === 'anytime',
     },
   ]);
   const onSelectTimeChange = (value: string) => {
@@ -54,11 +57,15 @@ const CreateHabitScreen: React.VFC<Props> = ({ navigation }) => {
     if (user?.uid) {
       try {
         const timeOfDay = selectedTimes.find(({ selected }) => selected);
-        await addHabit(user.uid, {
-          habitText,
-          timeOfDay: timeOfDay?.label ?? 'anytime',
-        });
-        navigation.navigate('HabitCreated');
+        await updateHabit(
+          user.uid,
+          {
+            habitText,
+            timeOfDay: timeOfDay?.label ?? 'anytime',
+          },
+          route.params.habitText,
+        );
+        navigation.navigate('HabitSaved');
       } catch (err) {
         console.log(err);
       } finally {
@@ -72,7 +79,6 @@ const CreateHabitScreen: React.VFC<Props> = ({ navigation }) => {
         style={styles.input}
         onChangeText={setHabitText}
         value={habitText}
-        placeholder="enter habit text"
       />
       <View style={styles.checkboxContainer}>
         {selectedTimes.map(({ label, selected }) => {
@@ -125,4 +131,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateHabitScreen;
+export default EditHabitScreen;

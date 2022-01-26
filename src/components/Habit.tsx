@@ -1,14 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-function getRandomColor() {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
+const getRandomColorHSL = (s: string, l: string, a: number) => {
+  const h = Math.random() * 360;
+  return `hsla(${h},${s},${l},${a})`;
+};
 
 interface Props {
   readonly habitText: string;
@@ -16,7 +12,7 @@ interface Props {
   readonly onPress: () => void;
 }
 const Habit: React.VFC<Props> = ({ habitText, onPress, color }) => {
-  const backgroundColor = color ? color : getRandomColor();
+  const backgroundColor = color ? color : getRandomColorHSL('50%', '60%', 1);
   return (
     <TouchableOpacity
       onPress={onPress}

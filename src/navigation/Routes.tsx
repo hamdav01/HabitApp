@@ -11,7 +11,7 @@ export const Routes = () => {
   const [loading, setLoading] = useState(true);
 
   const onAuthStateChanged: FirebaseAuthTypes.AuthListenerCallback = user => {
-    setUser(user);
+    setUser(user as FirebaseAuthTypes.User);
     setLoading(false);
   };
   useEffect(() => {
