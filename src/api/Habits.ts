@@ -1,5 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 import { getTodaysDate } from '../utils/Date';
+import uuid from 'react-native-uuid';
 
 export type TimeOfDay =
   | 'morning'
@@ -11,6 +12,7 @@ export interface HabitType {
   readonly habitText: string;
   readonly timeOfDay: TimeOfDay;
   readonly completed?: string;
+  readonly id: string | number[];
 }
 
 export interface HabitsSectionListType {
@@ -43,11 +45,9 @@ export const addHabit = async (id: string, habit: HabitType) => {
     .update({ habits: [...habits, habit] });
 };
 
-export const setHabitDone = async (id: string, habitText: string) => {
+export const setHabitDone = async (id: string, habitId: string | number[]) => {
   const habits = (await getHabits(id)).map(habit =>
-    habitText === habit.habitText
-      ? { ...habit, completed: getTodaysDate() }
-      : habit,
+    habitId === habit.id ? { ...habit, completed: getTodaysDate() } : habit,
   );
   return firestore().collection('Users').doc(id).update({ habits });
 };
@@ -55,20 +55,20 @@ export const setHabitDone = async (id: string, habitText: string) => {
 export const updateHabit = async (
   id: string,
   habit: HabitType,
-  oldHabitText: string,
+  habitId: string | number[],
 ) => {
   const habits = (await getHabits(id)).map(currentHabit =>
-    currentHabit.habitText === oldHabitText ? habit : currentHabit,
+    currentHabit.id === habitId ? habit : currentHabit,
   );
   return firestore().collection('Users').doc(id).update({ habits });
 };
 
-export const deleteHabit = async (id: string, habitText: string) => {
+export const deleteHabit = async (id: string, habitId: string | number[]) => {
   const habits = await getHabits(id);
   return firestore()
     .collection('Users')
     .doc(id)
     .update({
-      habits: habits.filter(habit => habitText !== habit.habitText),
+      habits: habits.filter(habit => habitId !== habit.id),
     });
 };

@@ -1,6 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
+import uuid from 'react-native-uuid';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { addHabit, TimeOfDay } from '../api/Habits';
@@ -56,6 +57,7 @@ const CreateHabitScreen: React.VFC<Props> = ({ navigation }) => {
         const timeOfDay = selectedTimes.find(({ selected }) => selected);
         await addHabit(user.uid, {
           habitText,
+          id: uuid.v4(),
           timeOfDay: timeOfDay?.label ?? 'anytime',
         });
         navigation.navigate('HabitCreated');

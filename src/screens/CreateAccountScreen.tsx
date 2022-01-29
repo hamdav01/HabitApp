@@ -5,21 +5,6 @@ import ErrorBox from '../components/ErrorBox';
 import { AuthContext } from '../context/auth/AuthProvider';
 import { validateEmail, validatePassword } from '../utils/Validation';
 
-const handleCreateAccountErrors = (error: { code: string }) => {
-  switch (error.code) {
-    case 'auth/email-already-in-use':
-      return 'Email address is already in use';
-    case 'auth/invalid-email':
-      return 'Email address is not valid';
-    case 'auth/operation-not-allowed':
-      return 'Cant create an account';
-    case 'auth/weak-password':
-      return 'The password needs to be longer';
-    default:
-      return 'Something went wrong';
-  }
-};
-
 const LoginScreen: React.VFC = () => {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();

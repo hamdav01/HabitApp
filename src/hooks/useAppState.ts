@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
 
 export const useAppState = (
-  callback?: (active: boolean) => void,
-  initCall?: boolean,
+  callback: (active: boolean) => void,
+  initCall: boolean = false,
 ) => {
   const appState = useRef(AppState.currentState);
   useEffect(() => {
@@ -11,11 +11,11 @@ export const useAppState = (
       const foreGround =
         appState.current.match(/inactive|background/) &&
         nextAppState === 'active';
-      callback?.(Boolean(foreGround));
+      callback(Boolean(foreGround));
       appState.current = nextAppState;
     });
     if (initCall) {
-      callback?.(appState.current === 'active');
+      callback(appState.current === 'active');
     }
     return () => subscription.remove();
   }, []);

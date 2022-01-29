@@ -5,6 +5,7 @@ import Habit from './../components/Habit';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthContext } from '../context/auth/AuthProvider';
 import {
+  getHabits,
   HabitsSectionListType,
   HabitType,
   subscribeToHabitChange,
@@ -13,6 +14,7 @@ import {
 import { AuthTabNavigationProp } from '../navigation/AuthTab';
 import { getTimeHours, getTodaysDate } from '../utils/Date';
 import { capitalizeFirstLetter } from '../utils/String';
+import { useAppState } from '../hooks/useAppState';
 
 const valueOfTimeOfDay = (timeOfDay: TimeOfDay) => {
   switch (timeOfDay) {
@@ -87,11 +89,21 @@ const HabitScreen: React.VFC<Props> = ({ navigation }) => {
     return () => subscriber();
   }, [user.uid]);
 
+  useAppState(async state => {
+    if (state) {
+      const habits = await getHabits(user.uid);
+      setHabits(habits);
+    }
+  });
+
   const renderItem = ({ item }: { item: HabitType }) => (
     <Habit
       habitText={item.habitText}
       onPress={() =>
-        navigation.navigate('Action', { habitText: item.habitText })
+        navigation.navigate('Action', {
+          habitText: item.habitText,
+          habitId: item.id,
+        })
       }
     />
   );

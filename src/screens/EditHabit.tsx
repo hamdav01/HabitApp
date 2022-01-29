@@ -1,12 +1,12 @@
 import { StackScreenProps } from '@react-navigation/stack';
-import { type } from 'ramda';
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { addHabit, HabitType, TimeOfDay, updateHabit } from '../api/Habits';
+import { deleteHabit, HabitType, TimeOfDay, updateHabit } from '../api/Habits';
 import Button from '../components/Button';
 import CheckboxText from '../components/CheckboxText';
+import TextButton from '../components/TextButton';
 import { AuthContext } from '../context/auth/AuthProvider';
 import { RootStackParamList } from '../navigation/AuthStack';
 
@@ -60,10 +60,11 @@ const EditHabitScreen: React.VFC<Props> = ({ navigation, route }) => {
         await updateHabit(
           user.uid,
           {
+            id: route.params.id,
             habitText,
             timeOfDay: timeOfDay?.label ?? 'anytime',
           },
-          route.params.habitText,
+          route.params.id,
         );
         navigation.navigate('HabitSaved');
       } catch (err) {
@@ -99,6 +100,14 @@ const EditHabitScreen: React.VFC<Props> = ({ navigation, route }) => {
         styleButton={styles.button}
         onPress={onDone}
       />
+      <TextButton
+        styleButtonText={styles.deleteHabitButton}
+        text="Delete"
+        onPress={async () => {
+          await deleteHabit(user.uid, route.params.id);
+          navigation.pop();
+        }}
+      />
     </SafeAreaView>
   );
 };
@@ -128,6 +137,10 @@ const styles = StyleSheet.create({
     width: 200,
     height: 50,
     marginVertical: 12,
+  },
+  deleteHabitButton: {
+    marginTop: 8,
+    color: '#ff0033',
   },
 });
 
