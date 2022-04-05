@@ -5,6 +5,7 @@ import Habit from './../components/Habit';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthContext } from '../context/auth/AuthProvider';
 import {
+  Days,
   getHabits,
   HabitsSectionListType,
   HabitType,
@@ -12,7 +13,7 @@ import {
   TimeOfDay,
 } from '../api/Habits';
 import { AuthTabNavigationProp } from '../navigation/AuthTab';
-import { getTimeHours, getTodaysDate } from '../utils/Date';
+import { getTimeHours, getTodaysDate, getTodaysDay } from '../utils/Date';
 import { capitalizeFirstLetter } from '../utils/String';
 import { useAppState } from '../hooks/useAppState';
 
@@ -30,39 +31,39 @@ const valueOfTimeOfDay = (timeOfDay: TimeOfDay) => {
       return 4;
   }
 };
-const isTimeOfDay = (timeOfDay: string, hour: number) => {
+const isTimeOfDay = (timeOfDay: string, hour: number, days: string[] = []) => {
   if (hour <= 11 && ['anytime', 'morning'].includes(timeOfDay)) {
-    return true;
+    return days.length > 0 ? days.includes(getTodaysDay()) : true;
   } else if (
     hour >= 11 &&
     hour <= 14 &&
     ['anytime', 'morning', 'lunch'].includes(timeOfDay)
   ) {
-    return true;
+    return days.length > 0 ? days.includes(getTodaysDay()) : true;
   } else if (
     hour >= 14 &&
     hour <= 20 &&
     ['anytime', 'morning', 'lunch', 'afternoon'].includes(timeOfDay)
   ) {
-    return true;
+    return days.length > 0 ? days.includes(getTodaysDay()) : true;
   } else if (
     hour >= 20 &&
     hour <= 24 &&
     ['anytime', 'morning', 'lunch', 'afternoon', 'evening'].includes(timeOfDay)
   ) {
-    return true;
+    return days.length > 0 ? days.includes(getTodaysDay()) : true;
   }
   return false;
 };
 
-const filterHabits = (habits: HabitType[]) => {
+const filterHabits = (habits: HabitType[] = []) => {
   const todaysDate = getTodaysDate();
   const hour = getTimeHours();
   return habits
     .reduce<HabitsSectionListType[]>((habits, habit) => {
       if (
         habit.completed === todaysDate ||
-        !isTimeOfDay(habit.timeOfDay, hour)
+        !isTimeOfDay(habit.timeOfDay, hour, habit.days)
       ) {
         return habits;
       }

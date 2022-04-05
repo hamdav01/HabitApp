@@ -1,6 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
 import { getTodaysDate } from '../utils/Date';
-import uuid from 'react-native-uuid';
 
 export type TimeOfDay =
   | 'morning'
@@ -8,7 +7,17 @@ export type TimeOfDay =
   | 'afternoon'
   | 'evening'
   | 'anytime';
+
+export type Days =
+  | 'monday'
+  | 'tuesday'
+  | 'wednesday'
+  | 'thursday'
+  | 'friday'
+  | 'saturday'
+  | 'sunday';
 export interface HabitType {
+  readonly days?: string[];
   readonly habitText: string;
   readonly timeOfDay: TimeOfDay;
   readonly completed?: string;
@@ -38,11 +47,18 @@ export const getHabits = async (id: string): Promise<HabitType[]> => {
 };
 
 export const addHabit = async (id: string, habit: HabitType) => {
-  const habits = await getHabits(id);
-  return firestore()
-    .collection('Users')
-    .doc(id)
-    .update({ habits: [...habits, habit] });
+  const habits = (await getHabits(id)) ?? [];
+  if (habits.length > 0) {
+    return firestore()
+      .collection('Users')
+      .doc(id)
+      .update({ habits: [...habits, habit] });
+  } else {
+    return firestore()
+      .collection('Users')
+      .doc(id)
+      .set({ habits: [habit] });
+  }
 };
 
 export const setHabitDone = async (id: string, habitId: string | number[]) => {
